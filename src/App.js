@@ -18,13 +18,25 @@ function App() {
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
-
-        let response = await uploadFile(data);
-        setResult(response.path);
+  
+        try {
+          const response = await uploadFile(data);
+          console.log("Server Response:", response); // Debugging
+          if (response && response.path) {
+            setResult(response.path);
+          } else {
+            console.error("Invalid response format:", response);
+            setResult("Error: Invalid server response");
+          }
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          setResult("Error: Unable to upload file");
+        }
       }
     };
     getImage();
   }, [file]);
+  
 
   const background = `${process.env.PUBLIC_URL}/1.jpeg`;
 
